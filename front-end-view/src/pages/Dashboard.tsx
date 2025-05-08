@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { AddTaskModal } from '../components/AddTaskModal';
 
 export const Dashboard: React.FC = () => {
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+  const kanbanBoardRef = useRef<{ fetchTasks: () => void }>(null);
+
+  const handleTaskAdded = () => {
+    setIsAddTaskModalOpen(false);
+    kanbanBoardRef.current?.fetchTasks();
+  };
 
   return (
     <Layout>
@@ -18,11 +24,11 @@ export const Dashboard: React.FC = () => {
             Add Task
           </button>
         </div>
-        <KanbanBoard />
+        <KanbanBoard ref={kanbanBoardRef} />
         <AddTaskModal
           isOpen={isAddTaskModalOpen}
           onClose={() => setIsAddTaskModalOpen(false)}
-          onTaskAdded={() => setIsAddTaskModalOpen(false)}
+          onTaskAdded={handleTaskAdded}
         />
       </div>
     </Layout>

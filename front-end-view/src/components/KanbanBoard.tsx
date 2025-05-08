@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Task } from '../types';
 import { tasksAPI } from '../services/api';
 
@@ -8,14 +8,10 @@ const COLUMNS = {
   DONE: 'Done',
 } as const;
 
-export const KanbanBoard: React.FC = () => {
+export const KanbanBoard = forwardRef<{ fetchTasks: () => void }>((_, ref) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   const fetchTasks = async () => {
     try {
@@ -28,6 +24,14 @@ export const KanbanBoard: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    fetchTasks
+  }));
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const handleDragStart = (e: React.DragEvent, taskId: number) => {
     e.dataTransfer.setData('taskId', taskId.toString());
@@ -69,6 +73,7 @@ export const KanbanBoard: React.FC = () => {
           <div className="space-y-4">
             {tasks
               .filter((task) => task.status === status)
+              .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
               .map((task) => (
                 <div
                   key={task.id}
@@ -101,4 +106,4 @@ export const KanbanBoard: React.FC = () => {
       ))}
     </div>
   );
-}; 
+}); 
