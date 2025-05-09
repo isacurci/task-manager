@@ -10,7 +10,7 @@ export const createTask = async (
   next: NextFunction
 ) => {
   try {
-    const { title, description, dueDate, assignedToId } = req.body;
+    const { title, description, dueDate, assignedToId, priority } = req.body;
     const createdById = req.user!.id;
 
     const task = await prisma.task.create({
@@ -20,6 +20,7 @@ export const createTask = async (
         dueDate: dueDate ? new Date(dueDate) : null,
         assignedToId,
         createdById,
+        priority,
       },
       include: {
         assignedTo: {
@@ -163,7 +164,7 @@ export const updateTask = async (
     const { id } = req.params;
     const userId = req.user!.id;
     const userRole = req.user!.role;
-    const { title, description, status, dueDate, assignedToId } = req.body;
+    const { title, description, status, dueDate, assignedToId, priority } = req.body;
 
     // Check if task exists and user has permission
     const existingTask = await prisma.task.findUnique({
@@ -190,6 +191,7 @@ export const updateTask = async (
         status,
         dueDate: dueDate ? new Date(dueDate) : null,
         assignedToId,
+        priority,
       },
       include: {
         assignedTo: {

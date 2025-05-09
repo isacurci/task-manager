@@ -12,7 +12,7 @@ export interface Task {
   title: string;
   description: string;
   status: 'TODO' | 'IN_PROGRESS' | 'DONE';
-  priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  priority: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
   assignedTo: User | null;
   createdBy: User;
   createdAt: string;

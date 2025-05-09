@@ -15,8 +15,6 @@ kanban-mvc/
 - [X] Autenticação de usuários (login/registro).
 - [X] Visualização de tarefas em um formato de quadro.
 - [X] Gerenciamento de tarefas (criar, atualizar, excluir, mover).
-- [ ] Atribuição de usuários para tarefas
-- [ ] Definir prazos para conclusão
 - [ ] Edição de tarefas
 
 ## Stack Tecnológica

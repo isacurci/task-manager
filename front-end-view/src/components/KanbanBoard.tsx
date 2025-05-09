@@ -84,15 +84,17 @@ export const KanbanBoard = forwardRef<{ fetchTasks: () => void }>((_, ref) => {
                   <h3 className="font-medium">{task.title}</h3>
                   <p className="text-sm text-gray-600 mt-1">{task.description}</p>
                   <div className="mt-2 flex items-center justify-between">
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      task.priority === 'HIGH'
-                        ? 'bg-red-100 text-red-800'
-                        : task.priority === 'MEDIUM'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {task.priority}
-                    </span>
+                    {task.priority && task.priority !== 'NONE' && (
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        task.priority === 'HIGH'
+                          ? 'bg-red-200 text-red-800'
+                          : task.priority === 'MEDIUM'
+                          ? 'bg-yellow-200 text-yellow-800'
+                          : 'bg-green-200 text-green-800'
+                      }`}>
+                        {task.priority.charAt(0) + task.priority.slice(1).toLowerCase()}
+                      </span>
+                    )}
                     {task.assignedTo && (
                       <span className="text-xs text-gray-500">
                         {task.assignedTo.name}
