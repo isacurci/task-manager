@@ -16,15 +16,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchUser = async () => {
+    try {
+      const response = await api.get('/auth/me');
+      setUser(response.data.data);
+      return true;
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     const initializeAuth = async () => {
       const token = localStorage.getItem('token');
       if (token) {
-        try {
-          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          await fetchUser();
-        } catch (error) {
-          // If token is invalid, clear it
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        const success = await fetchUser();
+        if (!success) {
           localStorage.removeItem('token');
           delete api.defaults.headers.common['Authorization'];
           setUser(null);
@@ -35,15 +44,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     initializeAuth();
   }, []);
-
-  const fetchUser = async () => {
-    try {
-      const response = await api.get('/auth/me');
-      setUser(response.data);
-    } catch (error) {
-      throw error;
-    }
-  };
 
   const login = async (email: string, password: string) => {
     try {
@@ -63,6 +63,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     delete api.defaults.headers.common['Authorization'];
     setUser(null);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, logout, loading }}>

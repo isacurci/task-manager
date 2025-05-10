@@ -11,11 +11,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/no-credentials" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (requireAdmin && user?.role !== 'ADMIN') {
-    return <Navigate to="/no-credentials" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;
