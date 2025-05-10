@@ -17,7 +17,7 @@ kanban-mvc/
 - [X] Gerenciamento de tarefas (criar, atualizar, excluir, mover).
 - [X] Edição de tarefas
 
-## Stack Tecnológica
+## Tecnologias
 
 ### Frontend (`front-end-view/`)
 - React com TypeScript

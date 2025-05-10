@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Task } from '../types';
 import { tasksAPI } from '../services/api';
 
@@ -20,6 +20,19 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   const [priority, setPriority] = useState<Task['priority']>(task.priority || 'NONE');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false);
+  const priorityRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (priorityRef.current && !priorityRef.current.contains(event.target as Node)) {
+        setIsPriorityOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +50,19 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
       setError('Failed to update task');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getPriorityColor = (priority: Task['priority']) => {
+    switch (priority) {
+      case 'NONE':
+        return 'bg-gray-200';
+      case 'LOW':
+        return 'bg-green-200';
+      case 'MEDIUM':
+        return 'bg-yellow-200';
+      case 'HIGH':
+        return 'bg-red-200';
     }
   };
 
@@ -79,16 +105,34 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Priority
             </label>
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as Task['priority'])}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              <option value="NONE">None</option>
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-            </select>
+            <div className="relative" ref={priorityRef}>
+              <button
+                type="button"
+                onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-left flex items-center"
+              >
+                <span className={`inline-block w-3 h-3 rounded-full ${getPriorityColor(priority)} mr-2`}></span>
+                {priority.charAt(0) + priority.slice(1).toLowerCase()}
+              </button>
+              {isPriorityOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                  {(['NONE', 'LOW', 'MEDIUM', 'HIGH'] as const).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => {
+                        setPriority(p);
+                        setIsPriorityOpen(false);
+                      }}
+                      className="w-full px-3 py-2 text-left hover:bg-gray-100 flex items-center"
+                    >
+                      <span className={`inline-block w-3 h-3 rounded-full ${getPriorityColor(p)} mr-2`}></span>
+                      {p.charAt(0) + p.slice(1).toLowerCase()}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex justify-end space-x-3">
             <button
