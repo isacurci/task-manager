@@ -11,6 +11,7 @@ front-end-view/node_modules
 # Production
 /build
 /dist
+/cli-app/dist
 
 # Environment files
 .env
