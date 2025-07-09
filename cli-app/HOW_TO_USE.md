@@ -1,56 +1,52 @@
-# How to Use the Task CLI
+# Como Usar o Task CLI
 
-This guide will walk you through setting up and using the `task-cli`.
+## 1. Instalação e Configuração
 
-## 1. Installation and Setup
-
-First, make sure you have the main `api-controller` running. Then, follow these steps to install and set up the CLI.
+Primeiro, certifique-se de que o `api-controller` principal esteja em execução. Em seguida, siga estes passos para instalar e configurar o CLI.
 
 ```bash
-# 1. Navigate to the CLI directory
+# 1. Navegue até o diretório do CLI
 cd cli-app
 
-# 2. Install dependencies
+# 2. Instale as dependências
 npm install
 
-# 3. Compile the TypeScript code
+# 3. Compile o código TypeScript
 npm run build
 
-# 4. Link the CLI to make it globally available on your system
+# 4. Vincule o CLI para torná-lo globalmente disponível no seu sistema
 npm link
 ```
 
-After running `npm link`, the `task-cli` command will be available from any directory in your terminal.
+Após executar `npm link`, o comando `task-cli` estará disponível em qualquer diretório no seu terminal.
 
-## 2. Usage
-
-Here are the commands you can use:
+## 2. Uso
 
 ### Login
 
-Before creating tasks, you need to log in with a user that exists in your database.
+Antes de criar tarefas, você precisa fazer login com um usuário que exista no seu banco de dados.
 
 ```bash
-# Usage: task-cli login <email> <password>
-task-cli login "your-email@example.com" "your-password"
+# Uso: task-cli login <email> <senha>
+task-cli login "seu-email@exemplo.com" "sua-senha"
 ```
 
-If successful, your authentication token will be saved locally.
+Se for bem-sucedido, seu token de autenticação será salvo localmente.
 
-### Create a Task
+### Criar uma Tarefa
 
-Once logged in, you can create a new task.
+Uma vez logado, você pode criar uma nova tarefa.
 
 ```bash
-# Usage: task-cli create-task <title> [description]
-task-cli create-task "My new task" "This is an optional description."
+# Uso: task-cli create-task <título> [descrição]
+task-cli create-task "Minha nova tarefa" "Adicione uma descrição (opcional)."
 ```
 
-The new task will be printed to the console upon creation.
+A nova tarefa será impressa no console após a criação.
 
 ### Logout
 
-When you are finished, you can log out. This will clear your saved authentication token.
+Quando terminar, você pode fazer logout. Isso limpará seu token de autenticação salvo.
 
 ```bash
 task-cli logout
